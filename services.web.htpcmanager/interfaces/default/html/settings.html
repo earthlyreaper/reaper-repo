@@ -1,0 +1,62 @@
+<%inherit file="base.html"/>
+<%namespace name="form" file="form.html"/>
+<% settings = self.attr.settings %>
+<div class="container">
+    <div class="content maincontent">
+        <h1 class="page-header page-title">Settings</h1>
+
+        <div class="tabbable tabs-left">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#general" data-toggle="tab">General</a></li>
+                % for m in htpc.MODULES:
+                <li><a href="#${m.get('id')}" data-toggle="tab">${m.get('name')}</a></li>
+                % endfor
+                <li><a href="#dashboard" data-toggle="tab">Dashboard</a></li>
+                <li><a href="#style" data-toggle="tab">Style</a></li>
+            </ul>
+
+            <div class="tab-content">
+            ${form.buildForm(id='general', classes='form-horizontal tab-pane active', legend='General',  fields=[
+                {'type':'text', 'label':'IP / Host *', 'name':'app_host', 'value':settings.get('app_host', '0.0.0.0')},
+                {'type':'text', 'label':'Port *', 'name':'app_port', 'value':settings.get('app_port', 8085)},
+                {'type':'text', 'label':'Webdir *', 'name':'app_webdir', 'value':settings.get('app_webdir', '/')},
+                {'type':'text', 'label':'Username *', 'name':'app_username', 'value':settings.get('app_username')},
+                {'type':'password', 'label':'Password *', 'name':'app_password', 'value':settings.get('app_password')},
+                {'type':'text', 'label':'SSL Cert', 'name':'app_ssl_cert', 'value':settings.get('app_ssl_cert')},
+                {'type':'text', 'label':'SSL Key', 'name':'app_ssl_key', 'value':settings.get('app_ssl_key')},
+                {'type':'text', 'label':'Git Path', 'name':'git_path', 'value':settings.get('git_path', 'git')}
+            ])}
+            % for m in htpc.MODULES:
+                % if m.get('test'):
+                    ${form.buildForm(action=m.get('action'), id=m.get('id'), classes='form-horizontal tab-pane', legend=m.get('name'),
+                                     fields=m.get('fields'), buttons=[
+                                         {'name':'Save changes', 'type':'submit', 'classes':'btn-primary'},
+                                         {'name':'Clear', 'type':'reset'},
+                                         {'name':'Test', 'type':'button', 'classes':'btn-test', 'test':m.get('test')}])}
+                % else:
+                    ${form.buildForm(action=m.get('action'), id=m.get('id'), classes='form-horizontal tab-pane', legend=m.get('name'),
+                                     fields=m.get('fields'))}
+                % endif
+            % endfor
+            ${form.buildForm(id='style', classes='form-horizontal tab-pane', legend='Style', fields=[
+                {'type':'select', 'label':'Template *', 'name':'app_template', 'options':settings.get_templates()},
+                {'type':'select', 'label':'Theme', 'name':'app_theme', 'options':settings.get_themes()}
+            ])}
+            ${form.buildForm(id='dashboard', classes='form-horizontal tab-pane', legend='Dashboard', fields=[
+                {'type':'bool', 'label':'Show recent movies', 'name':'dash_rec_movies',
+                 'checked':bool(settings.get('dash_rec_movies', 0))},
+                {'type':'bool', 'label':'Show recent shows', 'name':'dash_rec_tv',
+                 'checked':bool(settings.get('dash_rec_tv', 0))},
+                {'type':'bool', 'label':'Show recent music', 'name':'dash_rec_music',
+                 'checked':bool(settings.get('dash_rec_music', 0))},
+                {'type':'bool', 'label':'Show Sickbeard', 'name':'dash_sickbeard',
+                 'checked':bool(settings.get('dash_sickbeard', 0))},
+                {'type':'bool', 'label':'Show CouchPotato', 'name':'dash_couchpotato',
+                 'checked':bool(settings.get('dash_couchpotato', 0))},
+                {'type':'bool', 'label':'Show SABnzbd', 'name':'dash_sabnzbd',
+                 'checked':bool(settings.get('dash_sabnzbd', 0))}
+            ])}
+            </div>
+        </div>
+    </div>
+</div>
