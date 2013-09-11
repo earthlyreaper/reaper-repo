@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="service.web.htpcmanager"
+       name="HTPC Manager"
+       version="3.0.1"
+       provider-name="openelec.tv">
+  <requires>
+    <import addon="os.openelec.tv" version="3.0"/>
+    <import addon="xbmc.python" version="2.0"/>
+
+  </requires>
+  <extension point="xbmc.service"
+             library="default.py">
+        <provides>executable</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>HTPC Manager: Manage your Htpc from everywhere</summary>
+    <description>
+		HTPC Manager controls your Htpc with ease using multiple applications to control you htpc? No More! Htpc Manager combines all your software and provides an easy way to controll them all!
+    </description>
+    <platform>all</platform>
+  </extension>
+</addon>
